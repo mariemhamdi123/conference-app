@@ -1,0 +1,23 @@
+.profil {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  padding: 25px;
+  margin: 20px;
+  border-left: 4px solid #2563eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.icone {
+  font-size: 30px;
+  background: #e8f0fb;
+  padding: 15px;
+  border-radius: 50%;
+}
+
+h2 {
+  color: #1a3a63;
+  margin-top: 0;
+}
