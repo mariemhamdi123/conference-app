@@ -1,18 +1,21 @@
 
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Conference } from '../models/conference';
+import { ConferenceDetails } from '../conference-details/conference-details';
 
 @Component({
   selector: 'app-conference-list',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConferenceDetails],
   templateUrl: './conference-list.html',
   styleUrl: './conference-list.css'
 })
 export class ConferenceList {
 
   searchTerm: string = '';
+
+  selectedConference = signal<Conference | null>(null);
 
   conferences: Conference[] = [
     {
@@ -53,20 +56,42 @@ export class ConferenceList {
     }
   ];
 
+  get upcomingConferences(): Conference[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-get upcomingConferences(): Conference[] {
-  return this.conferences.filter(conference =>
-    conference.date >= new Date() &&
-    conference.title.toLowerCase().includes(
-      this.searchTerm.toLowerCase().trim()
-    )
-  );
-}
-
-register(conference: Conference) {
-  if (conference.nbParticipants < conference.maxParticipants) {
-    conference.nbParticipants++;
+    return this.conferences.filter(conference =>
+      conference.date >= today &&
+      conference.title.toLowerCase().includes(
+        this.searchTerm.toLowerCase().trim()
+      )
+    );
   }
-}
+
+  // Sélectionner une conférence
+  selectConference(conference: Conference) {
+    this.selectedConference.set(conference);
+  }
+
+  // Inscription à une conférence
+  register(conference: Conference) {
+
+    if (conference.nbParticipants < conference.maxParticipants) {
+
+      const updatedConference = {
+        ...conference,
+        nbParticipants: conference.nbParticipants + 1
+      };
+
+      this.conferences = this.conferences.map(c =>
+        c.id === conference.id ? updatedConference : c
+      );
+
+      if (this.selectedConference()?.id === conference.id) {
+        this.selectedConference.set(updatedConference);
+      }
+
+    }
+  }
 
 }

@@ -4,7 +4,7 @@
   <h2>📅 Liste des conférences à venir</h2>
 
   <p class="hint">
-    Recherchez une conférence par son titre.
+    Cliquez sur une conférence pour afficher ses détails.
   </p>
 
   <input
@@ -24,7 +24,10 @@
 
       @for (conference of upcomingConferences; track conference.id) {
 
-        <div class="conference-card">
+        <div
+          class="conference-card"
+          (click)="selectConference(conference)"
+          [class.selected]="selectedConference()?.id === conference.id">
 
           <h3>{{ conference.title | uppercase }}</h3>
 
@@ -44,7 +47,7 @@
           </p>
 
           <button
-            (click)="register(conference)"
+            (click)="$event.stopPropagation(); register(conference)"
             [disabled]="conference.nbParticipants >= conference.maxParticipants"
             [ngClass]="{
               'btn-available': conference.maxParticipants - conference.nbParticipants >= 10,
@@ -64,3 +67,10 @@
   }
 
 </div>
+
+<!-- Communication entre parent et enfant -->
+
+<app-conference-details
+  [conference]="selectedConference()"
+  (inscription)="register($event)">
+</app-conference-details>
