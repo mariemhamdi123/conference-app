@@ -5,10 +5,11 @@ import { Friends } from './friends/friends';
 import { Notifications } from './notifications/notifications';
 import { Profil } from './profil/profil';
 import { Footer } from './footer/footer';
+import { ConferenceList } from './conference-list/conference-list';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Navbar, Friends, Notifications, Profil, Footer],
+  imports: [Header, Navbar, Friends, Notifications, Profil, Footer, ConferenceList],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
